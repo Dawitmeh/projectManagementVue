@@ -7,6 +7,7 @@ module.exports = {
     "node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}",
     "node_modules/flowbite/**/*.{js,jsx,ts,tsx}",
   ],
+  // darkMode: 'class',
   theme: {
     fontFamily: {
       "theme-heading": ["'Exo 2'", "sans-serif"],
@@ -20,6 +21,7 @@ module.exports = {
       xl: "1200px",
       "2xl": "1400px",
     },
+
     extend: {
       colors: {
         primary: "#1F2937", // Dark Blue-Gray - Sidebar & Dark UI elements
@@ -37,6 +39,25 @@ module.exports = {
         warning: "#FBBF24", // Yellow - Warnings
         success: "#22C55E", // Green - Success Messages
         info: "#3B82F6", // Blue - Information
+
+        // Dark Mode Colors
+        dark: {
+          primary: "#CBD5E1", // Light Blue-Gray for Dark Mode
+          secondary: "#34D399", // Lighter Green Accent
+          accent: "#6EE7B7", // Softer Green Accent
+          background: "#1E293B", // Darker Background for Dark Mode
+          muted: "#9CA3AF", // Muted Text in Dark Mode
+          text: "#F9FAFB", // White Text for Readability
+          border: "#475569", // Dark Gray Border
+          card: "#334155", // Dark Grayish Blue Card Background
+          highlight: "#64748B", // Lighter Highlight
+          tableBg: "#0F172A", // Darker Table Background
+          tableHeader: "#94A3B8", // Lighter Table Headers
+          error: "#DC2626", // Darker Red for Errors
+          warning: "#EAB308", // Darker Yellow
+          success: "#16A34A", // Darker Green
+          info: "#2563EB", // Darker Blue
+        },
       },
     },
   },
