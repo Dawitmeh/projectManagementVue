@@ -42,7 +42,7 @@
                 type="text"
                 v-model="search.query"
                 id="simple-search"
-                class="block w-full p-2 pl-10 text-sm text-text border border-border rounded-lg bg-background focus:ring-secondary focus:border-secondary dark:bg-tableBg dark:border-tableHeader dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary"
+                class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 placeholder="Search"
                 required=""
               />
@@ -96,10 +96,12 @@
       </div>
 
       <!-- Table Section -->
-      <div v-else>
-        <table class="w-full text-sm text-left text-text dark:text-gray-400">
+      <div v-else class="overflow-x-auto">
+        <table
+          class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+        >
           <thead
-            class="text-xs text-text bg-background dark:bg-tableHeader dark:text-gray-400"
+            class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
           >
             <tr>
               <th scope="col" class="px-6 py-3">Name</th>
@@ -112,34 +114,34 @@
             <tr
               v-for="(type, index) in projectTypes"
               :key="index"
-              class="bg-white border-b dark:bg-tableBg dark:border-tableHeader"
+              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
             >
               <th
                 scope="row"
-                class="px-6 py-4 font-medium text-text whitespace-nowrap dark:text-white"
+                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
                 {{ type.name }}
               </th>
               <th
                 scope="row"
-                class="px-6 py-4 font-medium text-text whitespace-nowrap dark:text-white"
+                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
               >
                 {{ type.description }}
               </th>
               <td class="px-6 py-4">
-                {{ type.created_at }}
+                {{ formatDate(type.created_at) }}
               </td>
               <td class="flex items-center px-6 py-4 space-x-3">
                 <button
                   v-if="type.id"
                   @click="openEditModal(type.id)"
-                  class="font-medium text-secondary dark:text-secondary hover:underline"
+                  class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 >
                   Edit
                 </button>
                 <button
-                  @click="onRemove(type?.id)"
-                  class="font-medium text-error dark:text-error hover:underline"
+                  @click="openConfirmModal(type?.id)"
+                  class="font-medium text-red-600 dark:text-red-500 hover:underline"
                 >
                   Remove
                 </button>
@@ -147,6 +149,40 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div
+      v-if="showConfirmModal"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-lg font-semibold text-gray-800">Confirm Deletion</h2>
+        <p class="text-gray-600 mt-2">
+          Are you sure you want to delete this project type?
+        </p>
+        <input
+          v-model="confirmInput"
+          type="text"
+          placeholder='Type "DELETE" to confirm'
+          class="mt-4 p-2 border rounded w-full"
+        />
+        <div class="flex justify-end space-x-3 mt-4">
+          <button
+            @click="showConfirmModal = false"
+            class="px-4 py-2 bg-gray-300 rounded"
+          >
+            Cancel
+          </button>
+          <button
+            @click="confirmDelete"
+            :disabled="confirmInput !== 'DELETE'"
+            class="px-4 py-2 bg-red-600 text-white rounded disabled:opacity-50"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
 
@@ -167,7 +203,7 @@
             <div role="status">
               <svg
                 aria-hidden="true"
-                class="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-secondary"
+                class="inline w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
                 viewBox="0 0 100 101"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -212,39 +248,37 @@
             <div>
               <label
                 for="name"
-                class="block mb-2 text-sm font-medium text-text dark:text-white"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Title</label
               >
               <input
                 type="text"
                 v-model="projectType.name"
                 id="name"
-                class="bg-background border border-border text-text text-sm rounded-lg focus:ring-secondary focus:border-secondary block w-full p-2.5 dark:bg-tableBg dark:border-tableHeader dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary"
-                placeholder="Project type name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="project type name"
               />
             </div>
             <div>
               <label
                 for="message"
-                class="block mb-2 text-sm font-medium text-text dark:text-white"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >Description</label
               >
               <textarea
                 id="message"
                 rows="4"
                 v-model="projectType.description"
-                class="block p-2.5 w-full text-sm text-text bg-background rounded-lg border border-border focus:ring-secondary focus:border-secondary dark:bg-tableBg dark:border-tableHeader dark:placeholder-gray-400 dark:text-white dark:focus:ring-secondary dark:focus:border-secondary"
-                placeholder="Leave a comment..."
+                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Write description here..."
               ></textarea>
             </div>
           </div>
-
-          <!-- Form Buttons -->
           <div class="flex justify-between">
             <button
               @click="closeModal"
               type="button"
-              class="text-text bg-background hover:bg-card focus:ring-4 focus:outline-none focus:ring-secondary rounded-lg border border-border text-sm font-medium px-5 py-2.5 hover:text-text focus:z-10 dark:bg-tableBg dark:text-gray-300 dark:border-tableHeader dark:hover:text-white dark:hover:bg-secondary dark:focus:ring-secondary"
+              class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
             >
               Cancel
             </button>
@@ -316,7 +350,7 @@ function showModal() {
 
 function openEditModal(selectedType) {
   if (selectedType) {
-    store.getPorjectType(selectedType);
+    store.getProjectType(selectedType);
   }
   isShowModal.value = true;
   isEditing.value = true;
@@ -339,7 +373,7 @@ function createProjectType(e) {
         message: "The project type was successfully " + action,
       });
       closeModal();
-      store.getPorjectTypes();
+      store.getProjectTypes();
     })
     .catch((err) => {
       errMsg.value = err.response.data;
@@ -347,9 +381,33 @@ function createProjectType(e) {
         closeModal();
         errMsg.value = false;
       }, 3000);
-      store.getPorjectTypes();
+      store.getProjectTypes();
     });
 }
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A";
+  const options = { year: "numeric", month: "short", day: "numeric" };
+  return new Date(dateString).toLocaleDateString("en-US", options);
+};
+
+defineExpose({ formatDate });
+
+const showConfirmModal = ref(false);
+const confirmInput = ref("");
+const projectToDelete = ref(null);
+
+const openConfirmModal = (projectTypeId) => {
+  projectToDelete.value = projectTypeId;
+  showConfirmModal.value = true;
+};
+
+const confirmDelete = () => {
+  if (projectToDelete.value) {
+    store.deleteProjectType(projectToDelete.value);
+  }
+  showConfirmModal.value = false;
+  confirmInput.value = "";
+};
 
 onBeforeMount(() => {
   store.getProjectTypes();
