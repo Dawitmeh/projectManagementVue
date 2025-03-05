@@ -1,13 +1,12 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
 import axiosClient from "../../axios/axiosClient";
 
 export const useProjectStore = defineStore("projects", {
   state: () => ({
     projects: [],
     currentProject: null,
-    isLoading: ref(false),
-    errMsg: ref(null), // Properly initialized as null
+    isLoading: false,
+    errMsg: null,
     notification: {
       show: false,
       type: null,
@@ -31,7 +30,25 @@ export const useProjectStore = defineStore("projects", {
           message: "Project created successfully",
         });
       } catch (err) {
-        this.errMsg = err.response?.data?.message || "An error occurred.";
+        console.error("Project creation failed:", err); // Log the full error object
+
+        // Log full response details to inspect status, headers, and data
+        if (err.response) {
+          console.error("Error response:", err.response);
+          console.error("Status code:", err.response.status);
+          console.error("Response data:", err.response.data);
+        } else {
+          console.error("No response object from the server.");
+        }
+
+        // Extract detailed error messages
+        const errorMessage =
+          err.response?.data?.message ||
+          err.response?.data?.error ||
+          err.message ||
+          "An unexpected error occurred.";
+
+        this.errMsg = errorMessage;
       } finally {
         this.isLoading = false;
       }
