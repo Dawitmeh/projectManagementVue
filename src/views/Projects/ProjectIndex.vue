@@ -18,7 +18,7 @@
       <div class="relative w-full mb-6 group">
         <router-link
           :to="{ name: 'ProjectType' }"
-          class="block max-w-sm p-6 bg-primary border border-border rounded-lg shadow-md hover:bg-accent transition-all duration-300 transform hover:scale-105 dark:bg-tableBg dark:border-tableHeader dark:hover:bg-secondary"
+          class="block max-w-sm p-6 bg-white border border-border rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 dark:bg-tableBg dark:border-tableHeader"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +26,7 @@
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-6 h-6 text-white"
+            class="w-6 h-6 text-primary dark:text-white"
           >
             <path
               stroke-linecap="round"
@@ -34,7 +34,9 @@
               d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
             />
           </svg>
-          <p class="mt-3 font-bold text-white dark:text-white">Project Types</p>
+          <p class="mt-3 font-bold text-primary dark:text-white">
+            Project Types
+          </p>
         </router-link>
       </div>
     </div>
