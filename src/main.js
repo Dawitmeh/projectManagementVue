@@ -6,10 +6,24 @@ import App from "./App.vue";
 import router from "./router";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faBriefcase, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBriefcase,
+  faBan,
+  faCheckCircle,
+  faSpinner,
+  faPauseCircle,
+  faBars,
+} from "@fortawesome/free-solid-svg-icons";
 
 // Add icons to the library
-library.add(faBriefcase, faArrowRight);
+library.add(
+  faBriefcase,
+  faBan,
+  faCheckCircle,
+  faSpinner,
+  faPauseCircle,
+  faBars
+);
 
 const app = createApp(App);
 
